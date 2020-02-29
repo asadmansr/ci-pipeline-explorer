@@ -1,0 +1,123 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+  margin: 0;
+  font-family: 'Poppins';
+  background-color: #F6F7F7;
+  overflow-wrap: break-word; /* force long words to break */
+}
+
+h1 {
+  font-family: 'Poppins';
+  color: #2c3e50;
+}
+
+#header-title {
+  margin-top: 2em;
+}
+
+h2 {
+  color: #2c3e50;
+  font-family: 'Poppins';
+}
+
+#header-description {
+  font-style: italic;
+  font-size: 1.0em;
+  font-weight: normal;
+}
+
+#header {
+  width: 100%;
+  padding-left: 80px;
+  margin-bottom: 2em;
+}
+
+#content {
+  flex: 1 0 auto; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
+  display: grid;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  grid-template-columns: repeat(1, minmax(0px, 1fr));
+  grid-template-areas:
+    "left"
+    "right";
+}
+
+@media only screen and (min-width: 820px) {
+  #content {
+    grid-column-gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "left right";
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+  #language {
+    padding-left: 80px;
+  }
+}
+
+#left {
+  grid-area: left;
+  padding-right: 4%;
+}
+
+#right {
+  grid-area: right;
+  padding-left: 4%;
+}
+
+#right-title {
+  margin-top: 36px;
+  margin-bottom: 14px;
+}
+
+#language {
+  margin-top: 35px;
+}
+
+#first-selector-text {
+  font-size: 16px;
+  font-family: 'Poppins';
+}
+
+#first-selector {
+  margin-bottom: 12px;
+}
+
+#documentation {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px 10px 10px 15px ;
+  margin-top: 25px;
+}
+
+#codeblock {
+  white-space: normal;
+  margin-top: 4px;
+}
+
+#code {
+  border: 2px solid #f55e41;
+  padding: 20px 15px 20px 15px ;
+  border-radius: 4px;
+  white-space: pre-wrap; /* force long lines to break */
+  font-size: 18px;
+}
+
+select {
+  font-size: 17px;
+}
