@@ -100,6 +100,14 @@ $(document).ready(function () {
     updateInfo('script', this.value);
   });
 
+  $("#sel-image").change(function () {
+    updateInfo('image', this.value);
+  });
+
+  $("#sel-stage").change(function () {
+    updateInfo('stage', this.value);
+  });
+
   function updateInfo(category, itemName) {
     updateCode(category, itemName);
     showDocumentation();
