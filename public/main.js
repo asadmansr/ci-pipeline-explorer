@@ -108,6 +108,14 @@ $(document).ready(function () {
     updateInfo('stage', this.value);
   });
 
+  $("#sel-when").change(function () {
+    updateInfo('when', this.value);
+  });
+
+  $("#sel-artifacts").change(function () {
+    updateInfo('artifacts', this.value);
+  });
+
   function updateInfo(category, itemName) {
     updateCode(category, itemName);
     showDocumentation();

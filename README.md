@@ -5,7 +5,7 @@ https://pipeline-explorer.netlify.com
 
 <br>
 
-![](/docs/assets/demo.png)
+![](/docs/assets/demo_site.png)
 
 <br>
 
