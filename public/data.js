@@ -146,6 +146,104 @@ const dependenciesText = "build:app:<br>" +
     "    - build:app<br>" +
     "  script: deploy";
 
+const includeDesc = "Includes allows the inclusion of an external YAML file. <br><br> Support for include are:<br>" +
+    "<li> local - includes a file from the same repository as .gitlab-ci.yml<br>" +
+    "<li> file - includes a file from another private project under the same GitLab instance<br>" +
+    "<li> template - includes a template file shipped with GitLab<br>" +
+    "<li> remote - includes a file that can be downloaded, using HTTP/HTTPS, using a full URL";
+const includeText = "include:<br>" +
+    "  - local: 'templates/.branch-template.yml'<br>" +
+    "  - remote: 'https://gitlab.com/project/raw/master/.pr-template.yml'";
+
+const extendDesc = "Extends inherits elements from a defined job. It is an alternative to anchors, but more flexible and readable.";
+const extendText = ".build:<br>" +
+    "  script: build module<br>" +
+    "  stage: build<br>" +
+    "  only:<br>" +
+    "    refs:<br>" +
+    "      - branches<br>" +
+    "<br>" +
+    "build:app:<br>" +
+    "  extends: .build<br>" +
+    "  script: build app<br>" +
+    "  only:<br>" +
+    "    variables:<br>" +
+    "      - $ENVIRONMENT<br>" +
+    "<br>" +
+    "# The build:app: job would be defined as <br>" +
+    "build:app:<br>" +
+    "  script: build app<br>" +
+    "  stage: build<br>" +
+    "  only:<br>" +
+    "    refs:<br>" +
+    "      - branches<br>" +
+    "    variables:<br>" +
+    "      - $ENVIRONMENT";
+
+const anchorsDesc = "Anchors allow jobs to easily duplicate content across the YAML file. This is best for defining a job template and using it across different places in the pipeline.";
+const anchorsText = ".job_template: &job_definition<br>" +
+    "  image: ubuntu<br>" +
+    "  when: manual<br>" +
+    "<br>" +
+    "test:<br>" +
+    "  <<:*job_definition<br>" +
+    "  script:<br>" +
+    "    - test app<br>" +
+    "<br>" +
+    "test:<br>" +
+    "  image: ubuntu<br>" +
+    "  when: manual<br>" +
+    "  script:<br>" +
+    "    - test app";
+
+const allowFailureDesc = "Allow failure will proceed with the CI/CD pipeline regardless of the status of the corresponding job. If enabled and the job fails, GitLab UI will show a warning status but proceed with the pipeline.";
+const allowFailureText = "job:<br>" +
+    "  script: test<br>" +
+    "  allow_failure: true";
+
+const variablesDesc = "Variables defines high-level variables that can be accessed during any job in the pipeline. Variables that contain sensitive data should be placed in the GitLab CI/CD environment variables.";
+const variablesText = "variables:<br>" +
+    "  TEST_ENVIRONMENT: \"staging\"<br>" +
+    "  PROJECT_ID: \"sample-app\"";
+
+const coverageDesc = "GitLab UI can parse and display code coverage for a given job. Define the code coverage parameter on how to parse the report that provide the code coverage.";
+const coverageText = "job:<br>" +
+    "  script: rspec<br>" +
+    "  coverage: '/Code coverage: \d+\.\d+/'";
+
+const cacheDesc = "Cache defines the list of files and directories to be cached between jobs. Cache is intended to store project dependencies to speed up the pipeline.";
+const cacheText = "job:<br>" +
+    "  script: build<br>" +
+    "  cache:<br>" +
+    "    key: \"$CI_COMMIT_REF_SLUG\"<br>" +
+    "    paths: <br>" +
+    "      - binaries/";
+
+const needsDesc = "Needs allows the pipeline to run some jobs without waiting for the other ones. For example, the mobile:deploy will be executed as soon as mobile:build is completed without waiting for website:build.";
+const needsText = "mobile:build:<br>" +
+    "  stage: build<br>" +
+    "<br>" +
+    "website:build:<br>" +
+    "  stage: build<br>" +
+    "<br>" +
+    "mobile:deploy:<br>" +
+    "  stage: deploy<br>" +
+    "  needs: [\"mobile:build\"]<br>" +
+    "<br>" +
+    "website:deploy:<br>" +
+    "  stage: deploy<br>" +
+    "  needs: [\"website:build\"]";
+
+const rulesDesc = "Rules allow for a list of individual assertions that will be evaluated until matched.<br><br> For example, the job will be executed automatically if the target branch is master. If the first assertion fails, it will assert on next condition whether it is a feature branch. If it is, it will be a manual job. Finally, if none of the first two rules matches, the job will be created if the previous stage was successful.";
+const rulesText = "job:<br>" +
+    "  script: echo \"Hello World\"<br>" +
+    "  rules:<br>" +
+    "    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == \"master\"'<br>" +
+    "      when: always<br>" +
+    "    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feature/'<br>" +
+    "      when: manual<br>" +
+    "    - when: on_success";
+
 /** Content for explorer object */
 var explorerDataEn = {
     'script': {
@@ -266,7 +364,91 @@ var explorerDataEn = {
                 'text': dependenciesText
             }
         }
-    }
+    },
+    'miscellaneous': {
+        'option_text': 'Add miscellaneous parameters',
+        'action_text': 'I need to specify: ',
+        'selector_id': 'sel-miscellaneous',
+        'data': {
+            'include': {
+                'name': 'include',
+                'link_name': 'include',
+                'option_text': 'include',
+                'desc': includeDesc,
+                'text': includeText
+            },
+            'extend': {
+                'name': 'extend',
+                'link_name': 'extend',
+                'option_text': 'extend',
+                'desc': extendDesc,
+                'text': extendText
+            },
+            'anchors': {
+                'name': 'anchors',
+                'link_name': 'anchors',
+                'option_text': 'anchors',
+                'desc': anchorsDesc,
+                'text': anchorsText
+            }
+        }
+    },
+    'others': {
+        'option_text': 'Add other parameters',
+        'action_text': 'I need to specify: ',
+        'selector_id': 'sel-others',
+        'data': {
+            'variables': {
+                'name': 'variables',
+                'link_name': 'variables',
+                'option_text': 'variables',
+                'desc': variablesDesc,
+                'text': variablesText
+            },
+            'allow_failure': {
+                'name': 'allow_failure',
+                'link_name': 'allow_failure',
+                'option_text': 'allow failure',
+                'desc': allowFailureDesc,
+                'text': allowFailureText
+            },
+            'coverage': {
+                'name': 'coverage',
+                'link_name': 'coverage',
+                'option_text': 'coverage',
+                'desc': coverageDesc,
+                'text': coverageText
+            }
+        }
+    },
+    'advanced': {
+        'option_text': 'Add advanced parameters',
+        'action_text': 'I need to specify: ',
+        'selector_id': 'sel-advanced',
+        'data': {
+            'cache': {
+                'name': 'cache',
+                'link_name': 'cache',
+                'option_text': 'cache',
+                'desc': cacheDesc,
+                'text': cacheText
+            },
+            'needs': {
+                'name': 'needs',
+                'link_name': 'needs',
+                'option_text': 'needs',
+                'desc': needsDesc,
+                'text': needsText
+            },
+            'rules': {
+                'name': 'rules',
+                'link_name': 'rules',
+                'option_text': 'rules',
+                'desc': rulesDesc,
+                'text': rulesText
+            }
+        }
+    },
 };
 
 

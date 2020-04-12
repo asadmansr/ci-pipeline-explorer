@@ -116,6 +116,18 @@ $(document).ready(function () {
     updateInfo('artifacts', this.value);
   });
 
+  $("#sel-miscellaneous").change(function () {
+    updateInfo('miscellaneous', this.value);
+  });
+
+  $("#sel-others").change(function () {
+    updateInfo('others', this.value);
+  });
+
+  $("#sel-advanced").change(function () {
+    updateInfo('advanced', this.value);
+  });
+
   function updateInfo(category, itemName) {
     updateCode(category, itemName);
     showDocumentation();
